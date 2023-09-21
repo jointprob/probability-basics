@@ -1,4 +1,4 @@
-# probability-basics - talks resources
+# probability basics - talks & resources
 
 ## talks
 
