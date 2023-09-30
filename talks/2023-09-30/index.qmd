@@ -1,5 +1,5 @@
 ---
-title: "Probability basics for Bayesian analysis (WIP)"
+title: "Probability basics for Bayesian analysis"
 format: 
   revealjs:
     theme: serif
@@ -21,6 +21,7 @@ code {
 ```{r echo=FALSE}
 library(tidyverse)
 library(knitr)
+library(gridExtra)
 mytheme <- theme(
   legend.text = element_text(size=15),
   legend.title = element_text(size=20),
@@ -29,7 +30,7 @@ mytheme <- theme(
 
 helper_plot_XY_density <- (function(XY_tibble)
   XY_tibble %>%
-  ggplot(aes(x=X, y=Y)) 
+  ggplot(aes(X,Y)) 
   + geom_density_2d_filled()
   + mytheme)
 ```
@@ -76,7 +77,7 @@ Omega_finite %>% kable()
 
 ```{r}
 (Omega_finite %>%
-  ggplot(aes(x=X,y=Y))
+  ggplot(aes(X,Y))
   + geom_point(size=5))
 ```
 
@@ -185,50 +186,36 @@ $$= \{\omega \in \Omega_finite \vert 5 \leq Y(\omega) \leq 9, X(\omega)<0.3\}$$
 For our finite example, we may define probabilities proportional to number of outcomes.
 
 ```{r}
-P <- (function(event)
+P_finite <- (function(event)
   nrow(event)/N)
 
-P(Y_is_more_than_five)
+P_finite(Y_is_more_than_five)
 ```
 
 # Distribution
 
 A random variable $Y: \Omega \to \mathbb{R}$ pushes a probability measure $\mathbb{P}$ over $\Omega$ to a probability measure $P_Y$ over $\mathbb{R}$, called its distribution.
 
-$$P_X((0,0.3)) =$$
-$$\mathbb{P}(Y \in (0,0.3)) =$$
-$$\mathbb{P}(0 < X < 0.3)$$
-
 ## Distribution example
 
-```{r}
-(Omega_finite %>%
-  ggplot(aes(x=X, y=..density..)) 
-  + geom_histogram(bins=50)
-  + mytheme)
-```
+$$P_X((0,0.3)) =$$
+$$\mathbb{P}(X \in (0,0.3)) =$$
+$$\mathbb{P}(0 < X < 0.3)$$
 
 ## Distribution example - cont.
-
-$$P_X((0,0.3)) = \mathbb{P}(0 < X < 0.3)$$
 
 ```{r}
 (Omega_finite %>% ggplot() + mytheme
-  + geom_histogram(aes(x=X, y=..density..))
-  + geom_rect(xmin=0, xmax=0.3,
-              ymin=0, ymax=100, 
-              fill="lightgreen", alpha=0.01))
+  + geom_histogram(aes(X,..density..), bins=100)
+  + geom_segment(x=0, xend=0.3, y=0, yend=0, size=10,
+                 color="darkgreen", alpha=0.01)
+  + geom_vline(xintercept=c(0,0.3), color="darkgreen"))
 ```
-
-## Distribution example - cont.
 
 
 ```{r}
-Omega_finite %>%
-filter(0 < X & X < 0.3) %>%
-P()
+Omega_finite %>% filter(0 < X & X < 0.3) %>% P_finite()
 ```
-
 
 
 ## Joint distribution
@@ -237,9 +224,191 @@ Similarily, the distribution of a random vector $(X,Y)$ is a probability measure
 
 It is also called the *joint distribution* of $X$ and $Y$.
 
+## Joint distribution example
+
 ```{r}
-Omega_finite %>% helper_plot_XY_density()
+(ggplot(Omega_finite) + mytheme
+  + geom_point(aes(X,Y), size=5)
+  + geom_rect(xmin=0, xmax=0.3, ymin=30, ymax=1000,
+              fill="darkgreen", alpha=0.01))
 ```
+
+# Density
+
+A probability distribution $P_X$ is *absolutely continuous*, if there is a *density* function $f_X$ such that
+for every region $D$, $$P_X(D) = \int_D f_X(x) \mathrm{d} x$$
+
+## Density example
+
+```{r}
+(tibble(X=seq(0,2,0.01),
+        density=dgamma(X,2,6)) %>%
+  ggplot(aes(X,density)) + mytheme
+  + geom_area(size=3, alpha=0.4)
+  + geom_segment(x=0, xend=0.3, y=0, yend=0, size=10,
+                 color="darkgreen", alpha=0.01)
+  + geom_vline(xintercept=c(0,0.3), color="darkgreen"))
+```
+
+## Joint density example
+
+
+```{r}
+(expand.grid(X=seq(0,2,0.05), Y=seq(0,100,5)) %>%
+  mutate(density = dgamma(X,2,6) * dgamma(Y,4,X)) %>%
+  ggplot(aes(X,Y,z=density)) + mytheme
+  + geom_raster(aes(fill=density))
+  + geom_rect(xmin=0, xmax=0.3, ymin=30, ymax=1000,
+              color="lightgreen", alpha=0.001))
+```
+
+# Expectation
+
+- For a random variable $X$ with density $f_X$, it is defined (when the integral is well-defined):
+$$\mathbb{E}(X) = \int x f_X(x) \mathrm{d} x$$
+
+- It is actually a special case of a more general notion (not assuming having a density).
+
+- Note that the expectation is determined by the distribution.
+
+## Probability as expectation
+
+- Given an event $A$, we define $1_A$ to be the random variable such that:
+  - $1_A(\omega)=1$ if $\omega \in A$ 
+  - $1_A(\omega)=0$ if $\omega \notin A$ 
+
+- Then
+$$\mathbb{P}(A) = \mathbb{E}(1_A)$$
+
+# Conditioning
+
+## Conditional probability given an event
+
+- Given events $A$, $B$, such that $\mathbb{P}(B)>0$, the conditional probability of $A$ given $B$ is
+$$ \mathbb{P}(A|B) = 
+\frac
+{\mathbb{P}(A \cap B)}
+{\mathbb{P}(B)}$$
+
+- When also $\mathbb{P}(A)>0$, we get Bayes' formula:
+$$ \mathbb{P}(A|B) = 
+\mathbb{P}(B|A)
+\frac
+{\mathbb{P}(A)}
+{\mathbb{P}(B)}$$
+
+## Conditional distribution given an event
+- Given a random variable $X:\Omega \to \mathbb{R}$ and an event $B$ such that $\mathbb{P}(B)>0$,
+the conditional distribution of $X$ given $B$ is defined by pushing the probability measure $\mathbb{P}(\cdot |B)$ from $\Omega$ to $\mathbb{R}$:
+$$P_{X|B} (D) = \mathbb{P}(X \in D|B)$$
+for every region $D \subset \mathbb{R}$.
+
+- For example:
+$$P_{X|Y>5} ((0,0.3)) = \mathbb{P}(X<0.3 | 5<Y)$$
+
+## Conditional distribution example
+
+```{r}
+(Omega_finite %>%
+  ggplot(aes(X,..density..)) + mytheme
+  + geom_histogram())
+```
+
+## Conditional distribution example - cont.
+
+
+```{r}
+(ggplot(Omega_finite) + mytheme
+  + geom_point(aes(X,Y), size=5)
+  + geom_rect(xmin=0, xmax=2, ymin=10, ymax=1000,
+              fill="#00BFC4", alpha=0.01))
+```
+
+## Conditional distribution example - cont.
+
+```{r}
+(ggplot(Omega_finite) + mytheme
+  + geom_point(aes(X,Y,color=Y>10), size=5))
+```
+
+## Conditional distribution - cont.
+```{r}
+(Omega_finite %>%
+    ggplot(aes(X,..density..)) + mytheme
+  + geom_histogram(aes(fill=factor(Y>10)),
+                   position="identity",
+                   alpha=0.8))
+```
+
+## Conditional expectation given an event
+Given a random variable $X:\Omega \to \mathbb{R}$ and an event $B$ such that $\mathbb{P}(B)>0$, the conditional expectation $\mathbb{E}(X \vert B)$ is defined as the expectation of the conditional distribution.
+
+
+```{r}
+Omega_finite %>%
+filter(Y>10) %>%
+pull(X) %>%
+mean
+```
+
+## Conditional density given an event
+If a conditional distribution has a density, we call it "conditional density".
+
+## Conditional density - cont.
+
+- If $(X,Y)$ is an absolutely continuous random vector whose joint distribution has a density $f_{X,Y}$, and assume that $\mathbb{P}(1.9<Y<2.1)>0$. 
+
+- Then we can look into the conditional density of $X$ given $\mathbb{P}(1.9<Y<2.1)$:
+$$f_{X|1.9<Y<2.1}(x) = \frac {\int_{1.9}^{2.1} f_{(X,Y)}(x,y) \mathrm{d}y} {\mathbb{P}(1.9<Y<2.1)}$$
+for every $x$.
+
+## Conditional density - cont.
+
+- Indeed, for every $a,b$ such that $a<b$,
+$$\mathbb{P}(a<X<b | 1.9<Y<2.1) =$$
+$$\frac {\mathbb{P}(a<X<b , 1.9<Y<2.1)} {\mathbb{P}(1.9<Y<2.1)} =$$
+
+$$\frac {\int_a^b \int_{1.9}^{2.1} f_{(X,Y)}(x,y) \mathrm{d}y  \mathrm{d}x} {\mathbb{P}(1.9<Y<2.1)}$$
+
+## Conditional density - cont.
+Now what happens when we replace $1.9$ and $2.1$ with numbers which get closer to a limit $y_0$? 
+
+## Conditional density - cont.
+Intuitively, for a given $x$ and $y_0$,
+
+$$\frac {\int_{y_0-\delta}^{y_0+\delta} f_{(X,Y)}(x,y) \mathrm{d}y} {\mathbb{P}(y_0-\delta<Y<y_0+\delta)} = $$
+$$ \frac {\int_{y_0-\delta}^{y_0+\delta} f_{(X,Y)}(x,y) \mathrm{d}y} {\int_{y_0-\delta}^{y_0+\delta} f_Y(y) \mathrm{d}y}  \approx_{\delta>0, small} $$
+$$ \frac { 2 \delta f_{(X,Y)}(x,y_0) \mathrm{d}y} {2 \delta f_Y(y_0)} = $$
+$$ \frac { f_{(X,Y)}(x,y_0) \mathrm{d}y} {f_Y(y_0)}$$
+
+
+## Conditional density given a random variable
+- Assume $(X,Y)$ is a random vector whose joint distribution has a density $f_{X,Y}$, then for every $y$ where $f_Y(y)>0$, we can define the conditional density of $X$ given $Y=y$ by
+$$f_{X|Y=y}(x) = \frac {f_{X,Y}(x,y)}{f_Y(y)}$$
+for every $x$.
+
+- Note this is just a name, remember that $\mathbb{P}(Y=y)=0$ for every $y$.
+
+## Conditional density given a random variable - cont.
+
+- Now, for every $x$ we compose the mapping $y \mapsto f_{X|Y=y}(x)$ with the random variable $Y$:
+$$\omega \xrightarrow[]{Y} y \xrightarrow[]{} f_{X|Y=y}(x) = \frac {f_{X,Y}(x,y)}{f_Y(y)}$$
+
+- This way, we get a random variable that we call $f_{X|Y}(x)$:
+$$f_{X|Y}(x) = \frac {f_{X,Y}(x,Y)}{f_Y(Y)}$$
+
+- An we may view this as a random density function.
+
+## Conditionint on random variable
+- This way, we can also get conditional distribution, probability, and expectation conditioned on a random variable.
+
+- These are all random objects defined in our probability space.
+
+- We can characterize them in a way that generalizes to more general cases (without a density).
 
 
 # Recommended reading
+
+- G. Jay Kerns, *Introduction to Probability and Statistics Using R*, Third Edition, 2018 [source: IPSUR package](https://cran.r-project.org/web/packages/IPSUR/index.html) version 3.0 (thanks, Blaine Mooers!) -- till subsection 7.3.1
+
+- F.M. Dekking, C. Kraaikamp, H.P. Lopuhaa, and L.E. Meester, *A Modern Introduction to Probability and Statistics -- Understanding Why and How*, [Springer Texts in Statistics, 2005](https://link.springer.com/book/10.1007/1-84628-168-7) -- till about chapter 9
