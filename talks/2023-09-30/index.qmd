@@ -46,6 +46,28 @@ To estimate how many times I sneeze per hour, I wait and measure the time till m
 - Likelihood: $Y \vert _X \sim \Gamma(4,X)$
 - Posterior: $X \vert _Y \sim \Gamma(2+4,6+Y)$
 
+## A motivating example - cont.
+
+
+```{r}
+rgamma(1000, 2, 6) %>% qplot()
+```
+## A motivating example - cont.
+
+```{r}
+(tibble(x=seq(0,2,0.01),
+        density=dgamma(x, 2, 6)) %>%
+  ggplot(aes(x,density)) + mytheme
+  + geom_area())
+```
+## A motivating example - cont.
+
+- Waiting for one event of rate $x$ is distributed $Exp(x),
+$Exp(x) = Gamma(1,x)$   (1-"shape", $x$-"rate"),
+
+- Waiting for 4 events of rate x is distributed
+$Gamma(4,x)$ (4-shape, $x$-rate).
+
 
 # Background
 
@@ -104,6 +126,17 @@ Omega_finite %>%
 filter(Y>5) %>%
 kable()
 ```
+## Events example - cont.
+
+
+```{r}
+Omega_finite %>%
+filter(Y>5) %>%
+nrow()
+```
+
+
+
 
 ## Event space
 - $\mathcal{F}$ - the event space, is the set of events that can be conceptualized in our model of the world.
@@ -179,7 +212,7 @@ $$= \{\omega \in \Omega_{finite} \vert 5 \leq Y(\omega) \leq 9, X(\omega)<0.3\}$
 - A probability measure $\mathbb{P}$ is a function from to $\mathcal{F} \to [0,1]$, satisfying [Kolmogorov's axioms](https://www.britannica.com/topic/Foundations-of-the-Theory-of-Probability):
   - $\mathbb{P}(E) \geq 0$ for all $E$ in $\mathcal{F}$
   - $\mathbb{P}(\Omega) = 1$
-  - $\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)$
+  - $\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)$ for pairwise disjoint events
 
 - A sample space with a probability measure is called a probability space.
 

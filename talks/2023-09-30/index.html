@@ -406,6 +406,7 @@ code {
 
 </div>
 </section>
+<section>
 <section id="a-motivating-example" class="title-slide slide level1 center">
 <h1>A motivating example</h1>
 <p>To estimate how many times I sneeze per hour, I wait and measure the time till my forth sneeze.</p>
@@ -417,7 +418,30 @@ code {
 <li class="fragment"><p>Posterior: <span class="math inline">\(X \vert _Y \sim \Gamma(2+4,6+Y)\)</span></p></li>
 </ul>
 </section>
+<section id="a-motivating-example---cont." class="slide level2">
+<h2>A motivating example - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">rgamma</span>(<span class="dv">1000</span>, <span class="dv">2</span>, <span class="dv">6</span>) <span class="sc">%&gt;%</span> <span class="fu">qplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
+<section id="a-motivating-example---cont.-1" class="slide level2">
+<h2>A motivating example - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>(<span class="fu">tibble</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.01</span>),</span>
+<span id="cb2-2"><a href="#cb2-2"></a>        <span class="at">density=</span><span class="fu">dgamma</span>(x, <span class="dv">2</span>, <span class="dv">6</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x,density)) <span class="sc">+</span> mytheme</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="sc">+</span> <span class="fu">geom_area</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<section id="a-motivating-example---cont.-2" class="slide level2">
+<h2>A motivating example - cont.</h2>
+<ul>
+<li class="fragment"><p>Waiting for one event of rate <span class="math inline">\(x\)</span> is distributed $Exp(x), <span class="math inline">\(Exp(x) = Gamma(1,x)\)</span> (1-“shape”, <span class="math inline">\(x\)</span>-“rate”),</p></li>
+<li class="fragment"><p>Waiting for 4 events of rate x is distributed <span class="math inline">\(Gamma(4,x)\)</span> (4-shape, <span class="math inline">\(x\)</span>-rate).</p></li>
+</ul>
+</section></section>
 <section>
 <section id="background" class="title-slide slide level1 center">
 <h1>Background</h1>
@@ -440,12 +464,12 @@ code {
 <section id="sample-space-example" class="slide level2">
 <h2>Sample space example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>Omega_finite <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="fu">rgamma</span>(N, <span class="dv">2</span>, <span class="dv">6</span>),</span>
-<span id="cb1-4"><a href="#cb1-4"></a>                <span class="at">Y =</span> <span class="fu">rgamma</span>(N, <span class="dv">4</span>, X))</span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>Omega_finite <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">X =</span> <span class="fu">rgamma</span>(N, <span class="dv">2</span>, <span class="dv">6</span>),</span>
+<span id="cb3-4"><a href="#cb3-4"></a>                <span class="at">Y =</span> <span class="fu">rgamma</span>(N, <span class="dv">4</span>, X))</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <thead>
@@ -863,12 +887,12 @@ code {
 <section id="sample-space-example---cont" class="slide level2">
 <h2>Sample space example - cont</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,Y))</span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,Y))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
 <section id="sample-space---remarks" class="slide level2">
 <h2>Sample space - remarks</h2>
 <ul>
@@ -888,9 +912,9 @@ code {
 <h2>Events example</h2>
 <p>“all outcomes <span class="math inline">\(\omega\)</span> in <span class="math inline">\(\Omega_{finite}\)</span> in which I waited at least five hours”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>Omega_finite <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <thead>
@@ -1249,6 +1273,17 @@ code {
 </div>
 </div>
 </section>
+<section id="events-example---cont." class="slide level2">
+<h2>Events example - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 86</code></pre>
+</div>
+</div>
+</section>
 <section id="event-space" class="slide level2">
 <h2>Event space</h2>
 <ul>
@@ -1266,9 +1301,9 @@ code {
 <h2>Event space example</h2>
 <p>In this sample space:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">tibble</span>(<span class="at">U=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
-<span id="cb4-2"><a href="#cb4-2"></a>       <span class="at">V=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">tibble</span>(<span class="at">U=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>),</span>
+<span id="cb8-2"><a href="#cb8-2"></a>       <span class="at">V=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <thead>
@@ -1319,7 +1354,7 @@ code {
 <section id="random-variables-example" class="slide level2">
 <h2>Random variables example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <thead>
@@ -1737,7 +1772,7 @@ code {
 <section id="random-variables-example---cont." class="slide level2">
 <h2>Random variables example - cont.</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>Omega_finite<span class="sc">$</span>X[<span class="dv">13</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>Omega_finite<span class="sc">$</span>X[<span class="dv">13</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.293</code></pre>
 </div>
@@ -1746,8 +1781,8 @@ code {
 <section id="random-variables-coexist" class="slide level2">
 <h2>Random variables coexist</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">c</span>(Omega_finite<span class="sc">$</span>X[<span class="dv">13</span>],</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  Omega_finite<span class="sc">$</span>Y[<span class="dv">13</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">c</span>(Omega_finite<span class="sc">$</span>X[<span class="dv">13</span>],</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  Omega_finite<span class="sc">$</span>Y[<span class="dv">13</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.293000 2.958485</code></pre>
 </div>
@@ -1761,10 +1796,10 @@ code {
 <h2>Events of random variables</h2>
 <p><span class="math display">\[Y&gt;5\]</span> means the subset of <span class="math inline">\(\Omega_{finite}\)</span>: <span class="math display">\[\{\omega \in \Omega_{finite} \vert Y(\omega)&gt;5\}\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>Y_is_more_than_five <span class="ot">&lt;-</span> </span>
-<span id="cb10-2"><a href="#cb10-2"></a>  Omega_finite <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">5</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="fu">nrow</span>(Y_is_more_than_five)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>Y_is_more_than_five <span class="ot">&lt;-</span> </span>
+<span id="cb14-2"><a href="#cb14-2"></a>  Omega_finite <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="fu">nrow</span>(Y_is_more_than_five)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 86</code></pre>
 </div>
@@ -1782,7 +1817,7 @@ code {
 <ul>
 <li class="fragment"><span class="math inline">\(\mathbb{P}(E) \geq 0\)</span> for all <span class="math inline">\(E\)</span> in <span class="math inline">\(\mathcal{F}\)</span></li>
 <li class="fragment"><span class="math inline">\(\mathbb{P}(\Omega) = 1\)</span></li>
-<li class="fragment"><span class="math inline">\(\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)\)</span></li>
+<li class="fragment"><span class="math inline">\(\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)\)</span> for pairwise disjoint events</li>
 </ul></li>
 <li class="fragment">A sample space with a probability measure is called a probability space.</li>
 </ul>
@@ -1791,10 +1826,10 @@ code {
 <h2>Probability example</h2>
 <p>For our finite example, we may define probabilities proportional to number of outcomes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>P_finite <span class="ot">&lt;-</span> (<span class="cf">function</span>(event)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">nrow</span>(event)<span class="sc">/</span>N)</span>
-<span id="cb12-3"><a href="#cb12-3"></a></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="fu">P_finite</span>(Y_is_more_than_five)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>P_finite <span class="ot">&lt;-</span> (<span class="cf">function</span>(event)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">nrow</span>(event)<span class="sc">/</span>N)</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">P_finite</span>(Y_is_more_than_five)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.86</code></pre>
 </div>
@@ -1812,15 +1847,15 @@ code {
 <section id="distribution-example---cont." class="slide level2">
 <h2>Distribution example - cont.</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>(Omega_finite <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> mytheme</span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(X,..density..), <span class="at">bins=</span><span class="dv">100</span>)</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>, <span class="at">xend=</span><span class="fl">0.3</span>, <span class="at">y=</span><span class="dv">0</span>, <span class="at">yend=</span><span class="dv">0</span>, <span class="at">size=</span><span class="dv">10</span>,</span>
-<span id="cb14-4"><a href="#cb14-4"></a>                 <span class="at">color=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>)</span>
-<span id="cb14-5"><a href="#cb14-5"></a>  <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>), <span class="at">color=</span><span class="st">"darkgreen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(Omega_finite <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> mytheme</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(X,..density..), <span class="at">bins=</span><span class="dv">100</span>)</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>, <span class="at">xend=</span><span class="fl">0.3</span>, <span class="at">y=</span><span class="dv">0</span>, <span class="at">yend=</span><span class="dv">0</span>, <span class="at">size=</span><span class="dv">10</span>,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>                 <span class="at">color=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>)</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>), <span class="at">color=</span><span class="st">"darkgreen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"><div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="dv">0</span> <span class="sc">&lt;</span> X <span class="sc">&amp;</span> X <span class="sc">&lt;</span> <span class="fl">0.3</span>) <span class="sc">%&gt;%</span> <span class="fu">P_finite</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"><div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>Omega_finite <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="dv">0</span> <span class="sc">&lt;</span> X <span class="sc">&amp;</span> X <span class="sc">&lt;</span> <span class="fl">0.3</span>) <span class="sc">%&gt;%</span> <span class="fu">P_finite</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.57</code></pre>
 </div>
@@ -1834,13 +1869,13 @@ code {
 <section id="joint-distribution-example" class="slide level2">
 <h2>Joint distribution example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
-<span id="cb17-2"><a href="#cb17-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y), <span class="at">size=</span><span class="dv">5</span>)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="fl">0.3</span>, <span class="at">ymin=</span><span class="dv">30</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
-<span id="cb17-4"><a href="#cb17-4"></a>              <span class="at">fill=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y), <span class="at">size=</span><span class="dv">5</span>)</span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="fl">0.3</span>, <span class="at">ymin=</span><span class="dv">30</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>              <span class="at">fill=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="density" class="title-slide slide level1 center">
 <h1>Density</h1>
@@ -1849,28 +1884,28 @@ code {
 <section id="density-example" class="slide level2">
 <h2>Density example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(<span class="fu">tibble</span>(<span class="at">X=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.01</span>),</span>
-<span id="cb18-2"><a href="#cb18-2"></a>        <span class="at">density=</span><span class="fu">dgamma</span>(X,<span class="dv">2</span>,<span class="dv">6</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,density)) <span class="sc">+</span> mytheme</span>
-<span id="cb18-4"><a href="#cb18-4"></a>  <span class="sc">+</span> <span class="fu">geom_area</span>(<span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.4</span>)</span>
-<span id="cb18-5"><a href="#cb18-5"></a>  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>, <span class="at">xend=</span><span class="fl">0.3</span>, <span class="at">y=</span><span class="dv">0</span>, <span class="at">yend=</span><span class="dv">0</span>, <span class="at">size=</span><span class="dv">10</span>,</span>
-<span id="cb18-6"><a href="#cb18-6"></a>                 <span class="at">color=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>)</span>
-<span id="cb18-7"><a href="#cb18-7"></a>  <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>), <span class="at">color=</span><span class="st">"darkgreen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>(<span class="fu">tibble</span>(<span class="at">X=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.01</span>),</span>
+<span id="cb22-2"><a href="#cb22-2"></a>        <span class="at">density=</span><span class="fu">dgamma</span>(X,<span class="dv">2</span>,<span class="dv">6</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,density)) <span class="sc">+</span> mytheme</span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="sc">+</span> <span class="fu">geom_area</span>(<span class="at">size=</span><span class="dv">3</span>, <span class="at">alpha=</span><span class="fl">0.4</span>)</span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="sc">+</span> <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>, <span class="at">xend=</span><span class="fl">0.3</span>, <span class="at">y=</span><span class="dv">0</span>, <span class="at">yend=</span><span class="dv">0</span>, <span class="at">size=</span><span class="dv">10</span>,</span>
+<span id="cb22-6"><a href="#cb22-6"></a>                 <span class="at">color=</span><span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>)</span>
+<span id="cb22-7"><a href="#cb22-7"></a>  <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>), <span class="at">color=</span><span class="st">"darkgreen"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
 <section id="joint-density-example" class="slide level2">
 <h2>Joint density example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>(<span class="fu">expand.grid</span>(<span class="at">X=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.01</span>), <span class="at">Y=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(<span class="at">density =</span> <span class="fu">dgamma</span>(X,<span class="dv">2</span>,<span class="dv">6</span>) <span class="sc">*</span> <span class="fu">dgamma</span>(Y,<span class="dv">4</span>,X)) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,Y,<span class="at">z=</span>density)) <span class="sc">+</span> mytheme</span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="sc">+</span> <span class="fu">geom_raster</span>(<span class="fu">aes</span>(<span class="at">fill=</span>density))</span>
-<span id="cb19-5"><a href="#cb19-5"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="fl">0.3</span>, <span class="at">ymin=</span><span class="dv">30</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
-<span id="cb19-6"><a href="#cb19-6"></a>              <span class="at">color=</span><span class="st">"lightgreen"</span>, <span class="at">alpha=</span><span class="fl">0.001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>(<span class="fu">expand.grid</span>(<span class="at">X=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.01</span>), <span class="at">Y=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">mutate</span>(<span class="at">density =</span> <span class="fu">dgamma</span>(X,<span class="dv">2</span>,<span class="dv">6</span>) <span class="sc">*</span> <span class="fu">dgamma</span>(Y,<span class="dv">4</span>,X)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,Y,<span class="at">z=</span>density)) <span class="sc">+</span> mytheme</span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="sc">+</span> <span class="fu">geom_raster</span>(<span class="fu">aes</span>(<span class="at">fill=</span>density))</span>
+<span id="cb23-5"><a href="#cb23-5"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="fl">0.3</span>, <span class="at">ymin=</span><span class="dv">30</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
+<span id="cb23-6"><a href="#cb23-6"></a>              <span class="at">color=</span><span class="st">"lightgreen"</span>, <span class="at">alpha=</span><span class="fl">0.001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section></section>
 <section>
 <section id="expectation" class="title-slide slide level1 center">
 <h1>Expectation</h1>
@@ -1920,49 +1955,49 @@ code {
 <section id="conditional-distribution-example" class="slide level2">
 <h2>Conditional distribution example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,..density..)) <span class="sc">+</span> mytheme</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-17-1.png" width="960" class="r-stretch"></section>
-<section id="conditional-distribution-example---cont." class="slide level2">
-<h2>Conditional distribution example - cont.</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y), <span class="at">size=</span><span class="dv">5</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="dv">2</span>, <span class="at">ymin=</span><span class="dv">10</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
-<span id="cb21-4"><a href="#cb21-4"></a>              <span class="at">fill=</span><span class="st">"#00BFC4"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
-<section id="conditional-distribution-example---cont.-1" class="slide level2">
-<h2>Conditional distribution example - cont.</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y,<span class="at">color=</span>Y<span class="sc">&gt;</span><span class="dv">10</span>), <span class="at">size=</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-</div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
-<section id="conditional-distribution---cont." class="slide level2">
-<h2>Conditional distribution - cont.</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,..density..)) <span class="sc">+</span> mytheme</span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">factor</span>(Y<span class="sc">&gt;</span><span class="dv">10</span>)),</span>
-<span id="cb23-4"><a href="#cb23-4"></a>                   <span class="at">position=</span><span class="st">"identity"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5"></a>                   <span class="at">alpha=</span><span class="fl">0.8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,..density..)) <span class="sc">+</span> mytheme</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="index_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
+<section id="conditional-distribution-example---cont." class="slide level2">
+<h2>Conditional distribution example - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y), <span class="at">size=</span><span class="dv">5</span>)</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="sc">+</span> <span class="fu">geom_rect</span>(<span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="dv">2</span>, <span class="at">ymin=</span><span class="dv">10</span>, <span class="at">ymax=</span><span class="dv">1000</span>,</span>
+<span id="cb25-4"><a href="#cb25-4"></a>              <span class="at">fill=</span><span class="st">"#00BFC4"</span>, <span class="at">alpha=</span><span class="fl">0.01</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"></section>
+<section id="conditional-distribution-example---cont.-1" class="slide level2">
+<h2>Conditional distribution example - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>(<span class="fu">ggplot</span>(Omega_finite) <span class="sc">+</span> mytheme</span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(X,Y,<span class="at">color=</span>Y<span class="sc">&gt;</span><span class="dv">10</span>), <span class="at">size=</span><span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"></section>
+<section id="conditional-distribution---cont." class="slide level2">
+<h2>Conditional distribution - cont.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>(Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(X,..density..)) <span class="sc">+</span> mytheme</span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">fill=</span><span class="fu">factor</span>(Y<span class="sc">&gt;</span><span class="dv">10</span>)),</span>
+<span id="cb27-4"><a href="#cb27-4"></a>                   <span class="at">position=</span><span class="st">"identity"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5"></a>                   <span class="at">alpha=</span><span class="fl">0.8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-23-1.png" width="960" class="r-stretch"></section>
 <section id="conditional-expectation-given-an-event" class="slide level2">
 <h2>Conditional expectation given an event</h2>
 <p>Given a random variable <span class="math inline">\(X:\Omega \to \mathbb{R}\)</span> and an event <span class="math inline">\(B\)</span> such that <span class="math inline">\(\mathbb{P}(B)&gt;0\)</span>, the conditional expectation <span class="math inline">\(\mathbb{E}(X \vert B)\)</span> is defined as the expectation of the conditional distribution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>Omega_finite <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a><span class="fu">pull</span>(X) <span class="sc">%&gt;%</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>Omega_finite <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="fu">filter</span>(Y<span class="sc">&gt;</span><span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="fu">pull</span>(X) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a>mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2342998</code></pre>
 </div>
