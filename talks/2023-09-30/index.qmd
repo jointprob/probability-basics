@@ -11,11 +11,12 @@ format:
     freeze: auto
 ---
 
-```{css}
+```{css echo=FALSE}
 code {
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 ```
+
 
 ```{r echo=FALSE}
 library(tidyverse)
@@ -25,37 +26,6 @@ mytheme <- theme(
   legend.title = element_text(size=20),
   axis.title = element_text(size=20),
   axis.text = element_text(size=15))
-
-helper_plot_X_probs <- (function(X_tibble)
-  (X_tibble %>%
-    group_by(X) %>%
-    summarise(n=n()) %>%
-    mutate(p=n/sum(n)) %>%
-    ggplot(aes(x=X, y=p)) 
-    + geom_bar(stat="identity")
-    + mytheme))
-
-helper_plot_Y_probs <- (function(Y_tibble)
-  (Y_tibble %>%
-    group_by(Y) %>%
-    summarise(n=n()) %>%
-    mutate(p=n/sum(n)) %>%
-    ggplot(aes(x=Y, y=p)) 
-    + geom_bar(stat="identity")
-    + mytheme))
-
-helper_plot_XY_probs <- (function(XY_tibble)
-  (XY_tibble %>%
-    group_by(X,Y) %>%
-    summarise(n=n()) %>%
-    ungroup() %>%
-    mutate(p=n/sum(n)) %>%
-    ggplot(aes(x=X, y=Y, fill=p)) 
-    + geom_tile(color="black", lwd=1.5, linetype=1)
-    + geom_text(aes(label = p), 
-                color = "white", 
-                size = 7) 
-    + mytheme))
 
 helper_plot_XY_density <- (function(XY_tibble)
   XY_tibble %>%
@@ -95,11 +65,21 @@ To estimate how many times I sneeze per hour, I wait and measure the time till m
 
 ```{r}
 N <- 100
-Omega <- tibble(X = rgamma(N, 2, 6),
+set.seed(31)
+Omega_finite <- tibble(X = rgamma(N, 2, 6),
                 Y = rgamma(N, 4, X))
 
-Omega %>% kable()
+Omega_finite %>% kable()
 ```
+## Sample space example - cont
+
+
+```{r}
+(Omega_finite %>%
+  ggplot(aes(x=X,y=Y))
+  + geom_point(size=5))
+```
+
 
 ## Sample space - remarks
 - Usually we do not actually care about the elements $\omega$ in $\Omega$.
@@ -113,13 +93,12 @@ Omega %>% kable()
 - Subsets that we care about are called "events". 
 
 
-
 ## Events example
-"all outcomes $\omega$ in which I waited at least half an hour"
+"all outcomes $\omega$ in $\Omega_finite$ in which I waited at least five hours"
 
 ```{r}
-Omega %>%
-filter(Y>0.5) %>%
+Omega_finite %>%
+filter(Y>5) %>%
 kable()
 ```
 
@@ -152,12 +131,114 @@ if $U$ is part of our model of the world, but $V$ is not, then our event space c
 ## Random variables example
 
 ```{r}
-Omega %>% kable()
+Omega_finite %>% kable()
 ```
 
 ## Random variables example - cont.
 ```{r}
-Omega$X[13]
+Omega_finite$X[13]
+```
+
+## Random variables coexist
+
+```{r}
+c(Omega_finite$X[13],
+  Omega_finite$Y[13])
+```
+
+## Random vectors
+
+$(X,Y)$ may be considered a random vector, viewed as a function $\Omega_finite \to \mathbb{R}^2$
+$$\omega \mapsto (X(\omega), Y(\omega))$$
+
+## Events of random variables
+
+$$Y>5$$
+means the subset of $\Omega_finite$:
+$$\{\omega \in \Omega_finite \vert Y(\omega)>5\}$$
+
+
+```{r}
+Y_is_more_than_five <- 
+  Omega_finite %>% 
+  filter(Y>5)
+nrow(Y_is_more_than_five)
+```
+## Events of random variables - cont.
+
+$$(Y \in [5,9], X<0.3)$$
+means the subset of $\Omega_finite$:
+$$= \{\omega \in \Omega_finite \vert Y(\omega) \in [5,9],  X(\omega)<0.3\}$$
+$$= \{\omega \in \Omega_finite \vert 5 \leq Y(\omega) \leq 9, X(\omega)<0.3\}$$
+
+# Probability
+
+- A probability measure $\mathbb{P}$ is a function from to $\mathcal{F} \to [0,1]$, satisfying [Kolmogorov's axioms](https://www.britannica.com/topic/Foundations-of-the-Theory-of-Probability):
+  - $\mathbb{P}(E) \geq 0$ for all $E$ in $\mathcal{F}$
+  - $\mathbb{P}(\Omega) = 1$
+  - $\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)$
+
+- A sample space with a probability measure is called a probability space.
+
+## Probability example
+
+For our finite example, we may define probabilities proportional to number of outcomes.
+
+```{r}
+P <- (function(event)
+  nrow(event)/N)
+
+P(Y_is_more_than_five)
+```
+
+# Distribution
+
+A random variable $Y: \Omega \to \mathbb{R}$ pushes a probability measure $\mathbb{P}$ over $\Omega$ to a probability measure $P_Y$ over $\mathbb{R}$, called its distribution.
+
+$$P_X((0,0.3)) =$$
+$$\mathbb{P}(Y \in (0,0.3)) =$$
+$$\mathbb{P}(0 < X < 0.3)$$
+
+## Distribution example
+
+```{r}
+(Omega_finite %>%
+  ggplot(aes(x=X, y=..density..)) 
+  + geom_histogram(bins=50)
+  + mytheme)
+```
+
+## Distribution example - cont.
+
+$$P_X((0,0.3)) = \mathbb{P}(0 < X < 0.3)$$
+
+```{r}
+(Omega_finite %>% ggplot() + mytheme
+  + geom_histogram(aes(x=X, y=..density..))
+  + geom_rect(xmin=0, xmax=0.3,
+              ymin=0, ymax=100, 
+              fill="lightgreen", alpha=0.01))
+```
+
+## Distribution example - cont.
+
+
+```{r}
+Omega_finite %>%
+filter(0 < X & X < 0.3) %>%
+P()
+```
+
+
+
+## Joint distribution
+
+Similarily, the distribution of a random vector $(X,Y)$ is a probability measure over the plane $\mathbb{R^2}$.
+
+It is also called the *joint distribution* of $X$ and $Y$.
+
+```{r}
+Omega_finite %>% helper_plot_XY_density()
 ```
 
 
