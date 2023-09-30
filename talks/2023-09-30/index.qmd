@@ -4,7 +4,7 @@ format:
   revealjs:
     theme: serif
     navigation-mode: vertical
-    # incremental: true
+    incremental: true
     transition: slide
     background-transition: fade
     echo: true
@@ -51,6 +51,8 @@ To estimate how many times I sneeze per hour, I wait and measure the time till m
 
 [What distinguishes measure theory and probability theory?](https://math.stackexchange.com/questions/118221/what-distinguishes-measure-theory-and-probability-theory)
 
+## Kolmogorov's Foundations of the Theory of Probability
+![](./Kolmogorov.jpg)
 
 # Sample space
 
@@ -95,7 +97,7 @@ Omega_finite %>% kable()
 
 
 ## Events example
-"all outcomes $\omega$ in $\Omega_finite$ in which I waited at least five hours"
+"all outcomes $\omega$ in $\Omega_{finite}$ in which I waited at least five hours"
 
 ```{r}
 Omega_finite %>%
@@ -149,14 +151,14 @@ c(Omega_finite$X[13],
 
 ## Random vectors
 
-$(X,Y)$ may be considered a random vector, viewed as a function $\Omega_finite \to \mathbb{R}^2$
+$(X,Y)$ may be considered a random vector, viewed as a function $\Omega_{finite} \to \mathbb{R}^2$
 $$\omega \mapsto (X(\omega), Y(\omega))$$
 
 ## Events of random variables
 
 $$Y>5$$
-means the subset of $\Omega_finite$:
-$$\{\omega \in \Omega_finite \vert Y(\omega)>5\}$$
+means the subset of $\Omega_{finite}$:
+$$\{\omega \in \Omega_{finite} \vert Y(\omega)>5\}$$
 
 
 ```{r}
@@ -168,9 +170,9 @@ nrow(Y_is_more_than_five)
 ## Events of random variables - cont.
 
 $$(Y \in [5,9], X<0.3)$$
-means the subset of $\Omega_finite$:
-$$= \{\omega \in \Omega_finite \vert Y(\omega) \in [5,9],  X(\omega)<0.3\}$$
-$$= \{\omega \in \Omega_finite \vert 5 \leq Y(\omega) \leq 9, X(\omega)<0.3\}$$
+means the subset of $\Omega_{finite}$:
+$$= \{\omega \in \Omega_{finite} \vert Y(\omega) \in [5,9],  X(\omega)<0.3\}$$
+$$= \{\omega \in \Omega_{finite} \vert 5 \leq Y(\omega) \leq 9, X(\omega)<0.3\}$$
 
 # Probability
 
@@ -252,9 +254,8 @@ for every region $D$, $$P_X(D) = \int_D f_X(x) \mathrm{d} x$$
 
 ## Joint density example
 
-
 ```{r}
-(expand.grid(X=seq(0,2,0.05), Y=seq(0,100,5)) %>%
+(expand.grid(X=seq(0,2,0.01), Y=seq(0,100,1)) %>%
   mutate(density = dgamma(X,2,6) * dgamma(Y,4,X)) %>%
   ggplot(aes(X,Y,z=density)) + mytheme
   + geom_raster(aes(fill=density))
