@@ -195,7 +195,7 @@ kable()
 - A probability measure $\mathbb{P}$ is a function from to $\mathcal{F} \to [0,1]$, satisfying Kolmogorov's axioms:
   - $\mathbb{P}(E) \geq 0$ for all $E$ in $\mathcal{F}$
   - $\mathbb{P}(\Omega) = 1$
-  - $\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)$
+  - $\mathbb{P}(\bigcup_{i=1,2,...} E_i) = \sum_{i=1,2,...} \mathbb{P}(E_i)$ for pairwise disjoint events
 
 - A sample space with a probability measure is called a probability space.
 
